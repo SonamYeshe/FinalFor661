@@ -13,9 +13,10 @@ X_MAX=170;
 Y_MIN=-615;
 Y_MAX=-350;
 
-whiteImage = 255 * ones(600, 350, 'uint8');
+global whiteImage
+whiteImage = 255 * ones(265, 350, 'uint8');
 figure(1)
-imshow(whiteImage);
+% imshow(whiteImage);
 
 
 % axis([X_MIN X_MAX Y_MIN Y_MAX]);
@@ -50,6 +51,7 @@ eqC_D=polyfit([bellyC(1) bellyD(1)],[bellyC(2) bellyD(2)],1);
 % boundary = 2
 % obstacle = 0
 
+% fill the region
 for i=X_MIN:X_MAX
    for j= Y_MIN:Y_MAX
        if(ToCheckIfInObstacleSpace(i,j))
@@ -62,15 +64,41 @@ for i=X_MIN:X_MAX
 end
 
 
+for i=X_MIN+1:X_MAX
+   for j= Y_MIN+1:Y_MAX
+       if((whiteImage(j+616,i+186)==0 && whiteImage(j+616-1,i+186)==125) ...
+          || (whiteImage(j+616,i+186)==125 && whiteImage(j+616-1,i+186)==0)...
+          || (whiteImage(j+616,i+186)==0 && whiteImage(j+616,i+186-1)==125)...
+          || (whiteImage(j+616,i+186)==125 && whiteImage(j+616,i+186-1)==0))
+           % is a boundary, mark as 255
+           whiteImage(j+616,i+186)=255;
+       end
+   end
+end
 
+
+
+
+%% morse decomposition 
+% using h(x)=x from left to right 
+
+% 1. find critical point 
+criticalPoint=0;
+connectivity=0;
+
+for i=X_MIN+1:X_MAX
+   for j= Y_MIN+1:Y_MAX
+       if(whiteImage(j+616,i+186)==255 && whiteImage(j+616+1,i+186)~=255)
+            if(CheckIfCritical(i,j))
+              whiteImage(j+616,i+186)=50;               
+            end
+       end
+   end
+end
 
 
 figure(2)
 imshow(whiteImage);
-
-%% morse decomposition 
-
-
 
 
 %% Zig-zag
@@ -94,3 +122,44 @@ else
 end
 
 end
+
+function [IsCriticalPoint]=CheckIfCritical(Current_X, Current_Y)
+global whiteImage
+global  Y_MIN Y_MAX;
+up_free=false;
+up_obstacle=false;
+down_free=false;
+down_obstacle=false;
+
+% search up
+for j=Current_Y:Y_MAX 
+       if(whiteImage(j+616,Current_X+186)==0)
+           up_free=true;
+           break
+       else if (whiteImage(j+616,Current_X+186)==125)
+           up_obstacle=true;
+           break
+           end      
+       end
+end
+% search down
+for j=Current_Y:-1:Y_MIN
+           if(whiteImage(j+616,Current_X+186)==0)
+           down_free=true;
+           break
+       else if (whiteImage(j+616,Current_X+186)==125)
+           down_obstacle=true;
+           break
+           end      
+        end
+end
+% return whether is a critical point 
+
+if((down_free && up_free) || (up_obstacle && down_obstacle))
+    IsCriticalPoint=true;
+else
+    IsCriticalPoint=false;
+end
+
+end
+
