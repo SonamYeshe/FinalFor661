@@ -12,7 +12,9 @@ X_MIN=-185;
 X_MAX=170;
 Y_MIN=-615;
 Y_MAX=-350;
-whiteImage = 255 * ones(180, 180, 'uint8');
+
+whiteImage = 255 * ones(600, 350, 'uint8');
+figure(1)
 imshow(whiteImage);
 
 
@@ -52,14 +54,28 @@ for i=X_MIN:X_MAX
    for j= Y_MIN:Y_MAX
        if(ToCheckIfInObstacleSpace(i,j))
            % is a free space, mark as 1
-           
+           whiteImage(j+616,i+186)=0;
        else
-           
-           
+           whiteImage(j+616,i+186)=125;
        end
-  
    end
 end
+
+
+
+
+
+figure(2)
+imshow(whiteImage);
+
+%% morse decomposition 
+
+
+
+
+%% Zig-zag
+
+
 
 function [InFreeSpace]=ToCheckIfInObstacleSpace(Current_X, Current_Y)
 global bellyF bellyF_radius
@@ -78,10 +94,3 @@ else
 end
 
 end
-
-%% morse decomposition 
-
-
-
-
-%% Zig-zag
