@@ -96,12 +96,75 @@ for i=X_MIN+1:X_MAX
    end
 end
 
+% filter some critical point which is too close to each other
+CriticalPointIndex=1;
+for i=X_MIN+1:X_MAX
+   for j= Y_MIN+1:Y_MAX
+       if(whiteImage(j+616,i+186)==50)
+          if(ToFilteredNoiseCriticalPoint(i,j))
+%            CriticalPoint(CriticalPointIndex,:)=[i,j];
+           CriticalPoint(CriticalPointIndex,:)=[i+186, j+616];
+           CriticalPointIndex=CriticalPointIndex+1;
+          end
+       end
+   end
+end
+
+
 
 figure(2)
 imshow(whiteImage);
 
 
+
+
+
+
+
 %% Zig-zag
+
+% need to have image coordinate
+function [OutoFImageRange]=CheckOutoFImageRange(ImageCurrent_X,ImageCurrent_Y)
+global whiteImage
+OutoFImageRange=false;
+[m,n,~]=size(whiteImage);
+if(ImageCurrent_X > n || ImageCurrent_X < 1 || ... 
+        ImageCurrent_Y < 1 || ImageCurrent_Y > m)
+    OutoFImageRange=true;
+end
+
+end
+
+
+function [this_is_true_critical]= ToFilteredNoiseCriticalPoint(Current_X, Current_Y)
+global whiteImage
+white_count=0; % at least two white point 
+cp_point=0;
+
+for i=Current_X-1:Current_X+1
+    for j=Current_Y-1:Current_Y+1
+        imageY=j+616
+        imageX=i+186
+      if(~CheckOutoFImageRange(i+186, j+616))
+        if(whiteImage(j+616,i+186)==255)
+            white_count=white_count+1;
+        end
+        if(whiteImage(j+616,i+186)==50)
+            cp_point=cp_point+1;    
+        end
+      end
+    end
+end
+
+
+if (cp_point<3 && white_count>=2)
+    this_is_true_critical=true;
+else
+    this_is_true_critical=false;
+end
+
+end
+
 
 
 
