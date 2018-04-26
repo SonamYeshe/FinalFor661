@@ -1,7 +1,7 @@
 %% Require whiteImage & startPos & goalPos
 % Initiate start and goal positions.
 startPos = [255, 18];
-goalPos = [255, 102]; % or [255, 102]. Not sure.[102, 102]
+goalPos = [103, 101]; % or [255, 102]. Not sure.[102, 102]
 startPosX = startPos(2);
 startPosY = startPos(1);
 goalPosX = goalPos(2);
@@ -9,7 +9,7 @@ goalPosY = goalPos(1);
 % 
 currentX = startPosX;
 currentY = startPosY;
-figure (3)
+figure (1)
 hold on
 plot (currentX - 186, currentY - 616, 's', 'MarkerSize', 2, 'MarkerEdgeColor', 'r', 'MarkerFaceColor', 'r');
 pause(0.001)
