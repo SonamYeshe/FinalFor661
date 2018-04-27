@@ -34,7 +34,7 @@ function Zigzag(startPos, goalPos)
         end
         % can only move to the right.
         if moveUpAllowance == 0 && moveDownAllowance == 0
-%             currentX = currentX + 1; 
+            currentX = currentX + 1; 
             plot (currentX - 186, currentY - 616, 's', 'MarkerSize', 2, 'MarkerEdgeColor', 'g', 'MarkerFaceColor', 'g');
             pause(0.001)
         % move down-right first. (regard to figure 2)
