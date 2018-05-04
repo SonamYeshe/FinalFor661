@@ -1,4 +1,4 @@
-function Zigzag(startPos, goalPos)
+function path20 = Zigzag20(startPos, goalPos)
     global labeledWhiteImageCopy
     % Initiate start and goal positions.
     startPosX = startPos(2);
@@ -11,15 +11,16 @@ function Zigzag(startPos, goalPos)
     [r, c] = find(labeledWhiteImageCopy == labelID);
     posList = [c r];
     % Initiaize path.
+    path20 = []; % Save only every 20 nodes.
     path = zeros(size(posList, 1), 2);
     pathPosCount = 1;
     findGoal = 0;
     currentColumn = posList(posList(:, 1) == currentPos(1), :);
-    figure
+    figure (1)
     hold on
     while ~findGoal
         % Case 1: can only move to the right.
-        if length(currentColumn) == 1
+        if size(currentColumn, 1) == 1
             % Plot the positions in the new column ordered by sweeping order.
             path(pathPosCount, :) = currentColumn;
             pathPosCount = pathPosCount + 1;
@@ -32,10 +33,11 @@ function Zigzag(startPos, goalPos)
             end
             % Update currentPos and currentColumn.
             currentPos = [currentPos(1) + 1, currentPos(2)];
-            currentColumn = posList(posList == currentPos(1), :);
+            currentColumn = posList(posList(:, 1) == currentPos(1), :);
             % Check if reach goal position.
             if isequal(currentPos, [goalPosX, goalPosY])
                 findGoal = 1;
+                path(pathPosCount, :) = currentColumn;
                 plot (currentPos(1) - 186, currentPos(2) - 616, 's', 'MarkerSize', 4, 'MarkerEdgeColor', 'r', 'MarkerFaceColor', 'r');
                 pause(0.001)
             end
@@ -93,6 +95,12 @@ function Zigzag(startPos, goalPos)
             end
         end
     end
+    % Save every 20 nodes from path to path20.
+    path20 = cat(1, path20, path(1, :)); % Save start position.
+    for i = 1 : (size(path, 1) / 20 - 2)
+        path20 = cat(1, path20, path(20 * i, :));
+    end
+    path20 = cat(1, path20, path(end, :));
 end
 
 

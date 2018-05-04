@@ -36,6 +36,7 @@ function path = Zigzag(startPos, goalPos)
             % Check if reach goal position.
             if isequal(currentPos, [goalPosX, goalPosY])
                 findGoal = 1;
+                path(pathPosCount, :) = currentColumn;
                 plot (currentPos(1) - 186, currentPos(2) - 616, 's', 'MarkerSize', 4, 'MarkerEdgeColor', 'r', 'MarkerFaceColor', 'r');
                 pause(0.001)
             end

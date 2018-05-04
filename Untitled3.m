@@ -130,14 +130,34 @@ path = [];
 for i = 1 : length(cellPath)
     currentSweepID = cellPath(i);
     if ~alreadySwept(currentSweepID)
-        inCellPath = Zigzag(startPos(currentSweepID, :), goalPos(currentSweepID, :));
+        inCellPath = Zigzag20(startPos(currentSweepID, :), goalPos(currentSweepID, :));
         path = cat(1, path, inCellPath);
         cellCenterPos(currentSweepID, :) = path(uint64(length(path) / 2), :);
         alreadySwept(currentSweepID) = 1;
     else
-        path = cat(1, path, cellCenterPos(currentSweepID, :));
+        dist = norm(path(end, :) - cellCenterPos(currentSweepID, :));
+        middlePos = [round(linspace(path(end, 1), cellCenterPos(currentSweepID, 1), dist / 20)); ...
+                     round(linspace(path(end, 2), cellCenterPos(currentSweepID, 2), dist / 20))]';
+        path = cat(1, path, middlePos);
     end
 end
+path = path - [186, 616];
+path(:, 3) = zeros(length(path), 1);
+RCM = [-20, -480, 350];
+cppStartPos = path(1, :);
+dist = norm(RCM - cppStartPos);
+pathToApproach = [round(linspace(RCM(1), cppStartPos(1), dist / 20)); ...
+                  round(linspace(RCM(2), cppStartPos(2), dist / 20)); ...
+                  round(linspace(RCM(3), cppStartPos(3), dist / 20))]';
+path = cat(1, pathToApproach, path);
+
+%% Save final path as a text file.
+formatSpec = '%f %f %f \n';
+fileID = fopen('path.txt', 'w');
+for i = 1 : size(path, 1)
+    fprintf(fileID, formatSpec, path(i, 1), path(i, 2), path(i, 3));
+end
+fclose(fileID);
 
 %% Detect if the upside of the critical point is free.
 function [ifFreeSpace] = upFree(Pos)
