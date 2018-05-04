@@ -132,10 +132,10 @@ for i = 1 : length(cellPath)
     if ~alreadySwept(currentSweepID)
         inCellPath = Zigzag(startPos(currentSweepID, :), goalPos(currentSweepID, :));
         path = cat(1, path, inCellPath);
-        cellCenterPos(currentSweepID, :) = path(uint64(length(path) / 2), :);
+        cellCenterPos(currentSweepID, :) = path(unit64(length(path) / 2), :);
         alreadySwept(currentSweepID) = 1;
     else
-        path = cat(1, path, cellCenterPos(currentSweepID, :));
+        path = cat(2, path, cellCenterPos(currentSweepID, :));
     end
 end
 

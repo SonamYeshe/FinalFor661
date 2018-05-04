@@ -1,7 +1,7 @@
 %% Require whiteImage & startPos & goalPos
 %     startPos = [255, 18];
 %     goalPos = [103, 101]; 
-function Zigzag(startPos, goalPos)
+function Zigzag2(startPos, goalPos)
     global whiteImage
     % Initiate start and goal positions.
     startPosX = startPos(2);
