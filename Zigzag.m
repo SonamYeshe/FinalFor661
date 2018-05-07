@@ -1,4 +1,4 @@
-function path = Zigzag(startPos, goalPos)
+function path20 = Zigzag(startPos, goalPos)
     global labeledWhiteImageCopy
     % Initiate start and goal positions.
     startPosX = startPos(2);
@@ -11,6 +11,7 @@ function path = Zigzag(startPos, goalPos)
     [r, c] = find(labeledWhiteImageCopy == labelID);
     posList = [c r];
     % Initiaize path.
+    path20 = []; % Save only every 20 nodes.
     path = zeros(size(posList, 1), 2);
     pathPosCount = 1;
     findGoal = 0;
@@ -94,11 +95,18 @@ function path = Zigzag(startPos, goalPos)
             end
         end
     end
+    % Save every 10 nodes from path to path20.
+    pathColumnNum = path(:, 1);
+    pathColumnNum = unique(pathColumnNum, 'rows');
+    count = pathColumnNum(1,1):13:pathColumnNum(end,1);
+    count = count';
+    for kk = 1 : size(count, 1)
+        tmpColumn = path(find(path(:,1)==count(kk,1)), :);
+        path20 = cat(1, path20, tmpColumn(1, :));
+        selectedIndex = floor(abs(tmpColumn(1,2) - tmpColumn(end,2)) / 13);
+        for kkk = 1 : selectedIndex
+            path20 = cat(1, path20, tmpColumn(1 + 13 * kkk, :));
+        end
+        path20 = cat(1, path20, tmpColumn(end, :));
+    end
 end
-
-
-
-
-
-
-
