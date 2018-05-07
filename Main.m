@@ -1,5 +1,5 @@
 clear all
-%% create the plot 
+%% Create the working space.
 bellyA=[-170 -360];
 bellyB=[170 -360];
 bellyC=[170 -610];

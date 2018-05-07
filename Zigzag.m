@@ -1,3 +1,4 @@
+%% In-cell Boustrophedon sweep movement.
 function path20 = Zigzag(startPos, goalPos)
     global labeledWhiteImageCopy
     % Initiate start and goal positions.
@@ -95,7 +96,7 @@ function path20 = Zigzag(startPos, goalPos)
             end
         end
     end
-    % Save every 10 nodes from path to path20.
+    % Save every 15 nodes from path to path20.
     pathColumnNum = path(:, 1);
     pathColumnNum = unique(pathColumnNum, 'rows');
     count = pathColumnNum(1,1):13:pathColumnNum(end,1);

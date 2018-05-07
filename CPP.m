@@ -1,3 +1,4 @@
+%% Implementation of coverage path planning.
 global whiteImage
 whiteImageCopy = whiteImage;
 %% Cell decomposition.
